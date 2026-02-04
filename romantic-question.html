@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .image-container {
+            margin: 40px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .image-container img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            object-fit: cover;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .yes-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .yes-btn:hover {
+            background: #45a049;
+            transform: scale(1.1);
+        }
+
+        .no-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .no-btn:hover {
+            background: #da190b;
+            transform: scale(1.05);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-container {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-text {
+            color: white;
+            font-size: 1.8rem;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hearts {
+            font-size: 3rem;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="question-screen">
+            <h1>Will you be my Valentine? 💕</h1>
+            <div class="image-container">
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=300&h=300&fit=crop" alt="Cute teddy bear" id="main-image">
+            </div>
+            <div class="buttons">
+                <button class="yes-btn" onclick="clickYes()">Yes! 💖</button>
+                <button class="no-btn" id="no-btn" onclick="clickNo()">No</button>
+            </div>
+        </div>
+
+        <div id="success-screen" class="hidden success-container">
+            <div class="hearts">❤️ 💕 💖 ❤️</div>
+            <h1>Yay! I knew you'd say yes! 🎉</h1>
+            <div class="image-container">
+                <img src="https://images.unsplash.com/photo-1529490647338-a4eb6c58b06e?w=300&h=300&fit=crop" alt="Happy celebration" id="success-image">
+            </div>
+            <div class="success-text">
+                You've made me the happiest person! 💫<br>
+                Can't wait to spend this special day with you! 🌹
+            </div>
+            <div class="hearts">💝 ✨ 💗 ✨ 💝</div>
+        </div>
+    </div>
+
+    <canvas class="celebration hidden" id="confetti"></canvas>
+
+    <script>
+        let noClickCount = 0;
+        const noButton = document.getElementById('no-btn');
+        const noButtonTexts = [
+            "Are you sure? 🥺",
+            "Really? 😢",
+            "Please reconsider? 💔",
+            "One more chance? 🙏"
+        ];
+
+        function clickNo() {
+            if (noClickCount < noButtonTexts.length) {
+                noButton.textContent = noButtonTexts[noClickCount];
+                noClickCount++;
+            } else {
+                noButton.style.display = 'none';
+            }
+        }
+
+        function clickYes() {
+            document.getElementById('question-screen').classList.add('hidden');
+            document.getElementById('success-screen').classList.remove('hidden');
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const canvas = document.getElementById('confetti');
+            canvas.classList.remove('hidden');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confetti = [];
+            const confettiCount = 150;
+            const colors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#4d96ff', '#ff69eb'];
+
+            for (let i = 0; i < confettiCount; i++) {
+                confetti.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 2,
+                    d: Math.random() * confettiCount,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 10 - 10,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+                    tiltAngle: 0
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                confetti.forEach((particle, index) => {
+                    ctx.beginPath();
+                    ctx.lineWidth = particle.r / 2;
+                    ctx.strokeStyle = particle.color;
+                    ctx.moveTo(particle.x + particle.tilt + particle.r, particle.y);
+                    ctx.lineTo(particle.x + particle.tilt, particle.y + particle.tilt + particle.r);
+                    ctx.stroke();
+
+                    particle.tiltAngle += particle.tiltAngleIncremental;
+                    particle.y += (Math.cos(particle.d) + 3 + particle.r / 2) / 2;
+                    particle.tilt = Math.sin(particle.tiltAngle - index / 3) * 15;
+
+                    if (particle.y > canvas.height) {
+                        confetti[index] = {
+                            x: Math.random() * canvas.width,
+                            y: -10,
+                            r: particle.r,
+                            d: particle.d,
+                            color: particle.color,
+                            tilt: particle.tilt,
+                            tiltAngleIncremental: particle.tiltAngleIncremental,
+                            tiltAngle: particle.tiltAngle
+                        };
+                    }
+                });
+
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+    </script>
+</body>
+</html>
